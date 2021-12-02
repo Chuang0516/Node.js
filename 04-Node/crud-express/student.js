@@ -24,11 +24,21 @@ exports.save = function (student, callback) {
     if (err) {
       return callback(err);
     }
+
     var students = JSON.parse(data).students;
+
+    // 处理 id 唯一的，不重复
+    student.id = students[students.length - 1].id + 1;
+
+    // 把用户传递的对象保存到数组中
     students.push(student);
+
+    // 把对象数据转换为字符串
     var fileData = JSON.stringify({
       students: students,
     });
+
+    // 把字符串保存到文件中
     fs.writeFile(dbPath, fileData, function (err) {
       if (err) {
         return callback(err);
