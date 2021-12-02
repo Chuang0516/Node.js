@@ -24,7 +24,6 @@ exports.save = function (student, callback) {
     if (err) {
       return callback(err);
     }
-
     var students = JSON.parse(data).students;
 
     // 处理 id 唯一的，不重复
@@ -49,7 +48,18 @@ exports.save = function (student, callback) {
 };
 
 // 更新学生数据
-exports.update = function () {};
+exports.updateById = function (student, callback) {
+  fs.readFile(dbPath, 'utf8', function (err, data) {
+    if (err) {
+      return callback(err);
+    }
+    var students = JSON.parse(data).students;
+    // ES6中的数组方法
+    var stu = students.find(function (item) {
+      return item.id === student.id;
+    });
+  });
+};
 
 // 删除学生数据
 exports.delete = function () {};
