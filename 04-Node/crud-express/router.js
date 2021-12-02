@@ -1,6 +1,5 @@
 var fs = require('fs');
 var Student = require('./student.js');
-
 // Express 提供了一种更好的方式
 
 var express = require('express');
@@ -13,6 +12,9 @@ router.get('/students', function (req, res) {
   // readFile 的第二个参数是可选的，传入 utf8 就是把读取到的文件按照 utf8 编码转成可认识的字符
 
   Student.find(function (err, students) {
+    if (err) {
+      return res.status(500).send('Server error');
+    }
     res.render('index.html', {
       fruit: ['苹果', '香蕉', '橘子'],
       students: students,
@@ -29,6 +31,13 @@ router.post('/students/new', function (req, res) {
   // 2、处理
   // 将数据保存到 db.json 文件中，用以持久化存储
   // 3、发送响应
+  var student = req.body;
+  Student.save(req.body, function (err) {
+    if (err) {
+      return res.status(500).send('Server error');
+    }
+    res.redirect('/students');
+  });
 });
 
 router.get('/students/edit', function (req, res) {});
