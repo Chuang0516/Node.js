@@ -58,6 +58,10 @@ exports.updateById = function (student, callback) {
     var stu = students.find(function (item) {
       return item.id === student.id;
     });
+
+    for (var key in student) {
+      return stu[key] === student[key];
+    }
   });
 };
 
