@@ -18,6 +18,20 @@ exports.find = function (callback) {
   });
 };
 
+// 根据 id 获取学生信息对象
+exports.findById = function (id, callback) {
+  fs.readFile(dbPath, 'utf8', function (err, data) {
+    if (err) {
+      return callback(err);
+    }
+    var students = JSON.parse(data).students;
+    var ret = students.find(function (item) {
+      return item.id === id;
+    });
+    callback(null, ret);
+  });
+};
+
 // 添加学生数据
 exports.save = function (student, callback) {
   fs.readFile(dbPath, 'utf8', function (err, data) {
@@ -60,8 +74,21 @@ exports.updateById = function (student, callback) {
     });
 
     for (var key in student) {
-      return stu[key] === student[key];
+      stu[key] = student[key];
     }
+
+    // 把对象数据转换为字符串
+    var fileData = JSON.stringify({
+      students: students,
+    });
+
+    // 把字符串保存到文件中
+    fs.writeFile(dbPath, fileData, function (err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
   });
 };
 

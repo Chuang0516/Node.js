@@ -1,5 +1,19 @@
 var fs = require('fs');
 var Student = require('./student.js');
+
+Student.updateById(
+  {
+    id: 1,
+    name: '李四',
+    age: 19,
+  },
+  function (err) {
+    if (err) {
+      return console.log('修改失败');
+    }
+    console.log('修改成功');
+  }
+);
 // Express 提供了一种更好的方式
 
 var express = require('express');
@@ -40,8 +54,25 @@ router.post('/students/new', function (req, res) {
   });
 });
 
-router.get('/students/edit', function (req, res) {});
+// 渲染编辑学生页面
+router.get('/students/edit', function (req, res) {
+  // 1、在客户端的列表页中处理链接问题
+  // 2、获取要编辑的学生 id
+  // 3、渲染编辑页面
+  //    根据 id 查询学生信息
+  //    使用模板引擎渲染页面
 
+  Student.findById(parseInt(req.query.id), function (err, student) {
+    if (err) {
+      return res.status(500).send('Server error');
+    }
+    res.render('edit.html', {
+      student: student,
+    });
+  });
+});
+
+// 处理编辑学生页面
 router.post('/students/edit', function (req, res) {});
 
 router.get('/students/delete', function (req, res) {});

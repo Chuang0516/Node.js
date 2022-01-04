@@ -91,36 +91,36 @@
             {{ /each }}
           </div>
 
-          <h2 class="sub-header">Section title</h2>
-          <a href="/students/new" class="btn btn-success">添加学生</a>
+          <h2 class="sub-header">添加学生</h2>
           <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>姓名</th>
-                  <th>性别</th>
-                  <th>年龄</th>
-                  <th>爱好</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{ each students }}
-                <tr>
-                  <td>{{ $value.id }}</td>
-                  <td>{{$value.name}}</td>
-                  <td>{{ $value.gender }}</td>
-                  <td>{{ $value.age }}</td>
-                  <td>{{ $value.hobbies }}</td>
-                  <td>
-                    <a href="/students/edit?id={{ $value.id }}">编辑</a>
-                    <a href="/students/delete?id={{ $value.id }}">删除</a>
-                  </td>
-                </tr>
-                {{ /each }}
-              </tbody>
-            </table>
+            <form action="/students/new" method="post">
+              <div class="form-group">
+                <label for="">姓名</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id=""
+                  name="name"
+                  placeholder="请输入学生的姓名"
+                  value="{{ student.name }}"
+                />
+              </div>
+              <div class="form-group">
+                <label for="">性别</label>
+                <label class="radio-inline"> <input type="radio" name="gender" id="" value="0" /> 男 </label>
+                <label class="radio-inline"> <input type="radio" name="gender" id="" value="1" /> 女 </label>
+              </div>
+              <div class="form-group">
+                <label for="">年龄</label>
+                <input type="number" id="" name="age" value="{{ student.age }}" />
+              </div>
+              <div class="form-group">
+                <label for="">爱好</label>
+                <input type="text" id="" name="hobbies" value="{{ student.hobbies }}" />
+              </div>
+
+              <button type="submit" class="btn btn-default">提交</button>
+            </form>
           </div>
         </div>
       </div>
