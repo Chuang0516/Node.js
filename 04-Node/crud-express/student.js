@@ -68,6 +68,9 @@ exports.updateById = function (student, callback) {
       return callback(err);
     }
     var students = JSON.parse(data).students;
+
+    student.id = parseInt(student.id);
+
     // ES6中的数组方法
     var stu = students.find(function (item) {
       return item.id === student.id;
@@ -93,4 +96,31 @@ exports.updateById = function (student, callback) {
 };
 
 // 删除学生数据
-exports.delete = function () {};
+exports.deleteById = function (id, callback) {
+  fs.readFile(dbPath, 'utf8', function (err, data) {
+    if (err) {
+      return callback(err);
+    }
+    var students = JSON.parse(data).students;
+
+    var deleteId = students.findIndex(function (item) {
+      return item.id === parseInt(id);
+    });
+
+    // 根据下标从数组中删除对应的学生对象
+    students.splice(deleteId, 1);
+
+    // 把对象数据转换为字符串
+    var fileData = JSON.stringify({
+      students: students,
+    });
+
+    // 把字符串保存到文件中
+    fs.writeFile(dbPath, fileData, function (err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+  });
+};

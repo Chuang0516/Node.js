@@ -1,19 +1,5 @@
 var fs = require('fs');
 var Student = require('./student.js');
-
-Student.updateById(
-  {
-    id: 1,
-    name: '李四',
-    age: 19,
-  },
-  function (err) {
-    if (err) {
-      return console.log('修改失败');
-    }
-    console.log('修改成功');
-  }
-);
 // Express 提供了一种更好的方式
 
 var express = require('express');
@@ -45,7 +31,6 @@ router.post('/students/new', function (req, res) {
   // 2、处理
   // 将数据保存到 db.json 文件中，用以持久化存储
   // 3、发送响应
-  var student = req.body;
   Student.save(req.body, function (err) {
     if (err) {
       return res.status(500).send('Server error');
@@ -61,7 +46,6 @@ router.get('/students/edit', function (req, res) {
   // 3、渲染编辑页面
   //    根据 id 查询学生信息
   //    使用模板引擎渲染页面
-
   Student.findById(parseInt(req.query.id), function (err, student) {
     if (err) {
       return res.status(500).send('Server error');
@@ -73,9 +57,31 @@ router.get('/students/edit', function (req, res) {
 });
 
 // 处理编辑学生页面
-router.post('/students/edit', function (req, res) {});
+router.post('/students/edit', function (req, res) {
+  // 1、获取表单数据
+  //    req.body
+  // 2、保存更新
+  //    Student.update()
+  // 3、发送响应
+  Student.updateById(req.body, function (err) {
+    if (err) {
+      return res.status(500).send('Server error');
+    }
+    res.redirect('/students');
+  });
+});
 
-router.get('/students/delete', function (req, res) {});
+router.get('/students/delete', function (req, res) {
+  // 1、获取要删除的 id
+  // 2、根据 id 执行删除操作
+  // 3、根据操作结果发送响应数据
+  Student.deleteById(req.query.id, function (err) {
+    if (err) {
+      return res.status(500).send('Server error');
+    }
+    res.redirect('/students');
+  });
+});
 
 // 3、把 router 导出
 module.exports = router;
